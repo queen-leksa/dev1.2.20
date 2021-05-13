@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keyboard events</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .block {
+            width: 600px;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 2px 1px 5px 0 silver;
+            font: 2rem monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="block"></div>
+    <script>
+        let block = document.getElementsByClassName("block")[0];
+        // ["1", "2", "3", "4", "5"][0] => "1"
+
+        /*
+            mouse events:
+                - click
+                - mousedown
+                - mouseup
+            keyboard events
+                - keypress (работает только для букв, цифр, символов пунктуации и Enter)
+                - keydown
+                - keyup
+        */
+        document.body.addEventListener("keypress", function(e) {
+            // console.log(e.key);
+            // console.log(e.code);
+            if (e.code === "Space") {
+                block.innerHTML += "&nbsp;";
+            } else if (e.code === "Enter") {
+                block.innerHTML += "<br>";
+            } else {
+                block.innerText += e.key;
+            }
+        });
+        document.body.addEventListener("keydown", function(e) {
+            // console.log(e);
+            // console.log(e.key);
+            if (e.key === "Backspace") {
+                let text = Array.from(block.innerText);
+                text.pop();
+                block.innerText = text.join("");
+            } else {
+                if (e.ctrlKey) {
+                    e.preventDefault();
+                    console.log(e.key);
+                }
+            }
+        });
+
+        /*
+            При нажатии на комбинаци клавиш
+            Ctrl+R меняет цвет блока на красный
+            Ctrl+G меняет цвет блока на зеленый
+            Ctrl+B меняет цвет блока на синий
+            Ctrl+F убирает цвет у блока к первоначальному состоянию
+            
+
+        */
+
+    </script>
+</body>
+</html>

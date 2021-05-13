@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>События (начало)</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+        button {
+            font-size: 3rem;
+            width: 250px;
+            border-radius: 1rem;
+            outline: none;
+            cursor: pointer;
+        }
+        .popup {
+            position: fixed;
+            font-family: sans-serif;
+            padding: .2rem 1rem;
+            border-radius: 1rem;
+            box-shadow: 0 0 10px 0 #0004;
+            background-color: #fff;
+            display: none;
+        }
+        .popup.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Это - заголовок!</h1>
+    <button onclick="setClick(this)">Кнопочка</button>
+    <div class="popup"></div>
+    <script>
+        let counter = 0;
+        let btn = document.querySelector("button");
+        function setClick(el) {
+            counter++;
+            el.innerText = "Тык " + counter;
+        }
+        let hideLvl = 1;
+        function hide(e) {
+            hideLvl -= 0.1;
+            e.target.style.opacity = hideLvl;
+        }
+        // document.body.addEventListener("mouseover", hide);
+        let popupFlag = false;
+        let popup = document.querySelector(".popup");
+
+        /*
+            Добавляем попапу класс active (если флаг - истина), иначе проверяем наличие класса и удаляем его
+
+            Добавить внутрь окошка координаты мышки и выставить попап рядом с мышкой
+        */
+
+        /*
+            classList - спсок всех классов тега
+            Методы:
+                .add("class") - добавить класс
+                .remove("class") - удалить класс
+                .toggle("class") - если класс присутствует в теге, то он удалится, иначе - добится
+                .contains("class") - проверить есть ли класс (true / false)
+        */
+        function checkPopup(flag, x, y) {
+            if (flag) {
+                if (!popup.classList.contains("active")) {
+                    popup.classList.add("active");
+                }
+                popup.innerHTML = `x: ${x}<br>y: ${y}`;
+                popup.style.top = y + "px";
+                popup.style.left = x + "px";
+
+            } else {
+                if (popup.classList.contains("active")) {
+                    popup.classList.remove("active");
+                }
+            }
+        }
+
+
+        function showInfo(e) {
+            // console.log(e.clientX, e.clientY);
+            switch (e.type) {
+                case "mousedown":
+                    popupFlag = true;
+                    checkPopup(popupFlag, e.clientX, e.clientY);
+                    break;
+                case "mouseup":
+                    popupFlag = false;
+                    checkPopup(popupFlag, e.clientX, e.clientY);
+                    break;
+                case "mousemove":
+                    if (popupFlag) {
+                        checkPopup(popupFlag, e.clientX, e.clientY);
+                    }
+                    break;
+            }
+        }
+        document.body.addEventListener("mousedown", showInfo);
+        document.body.addEventListener("mouseup", showInfo);
+        document.body.addEventListener("mousemove", showInfo);
+    </script>
+</body>
+</html>
